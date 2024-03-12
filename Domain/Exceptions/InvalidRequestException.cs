@@ -3,12 +3,8 @@
 namespace Domain.Exceptions;
 
 [JsonObject(MemberSerialization.OptIn)]
-public class InvalidRequestException : Exception
+public class InvalidRequestException(IEnumerable<string> errors) : Exception
 {
     [JsonProperty]
-    public IList<string> ErrorMessages { get; }
-    public InvalidRequestException(IEnumerable<string> errors)
-    {
-        this.ErrorMessages = errors.ToList();
-    }
+    public IList<string> ErrorMessages { get; } = errors.ToList();
 }

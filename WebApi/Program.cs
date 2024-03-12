@@ -8,7 +8,10 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseMiddleware<ExceptionHandlerMiddleware>();
+app.UseExceptionHandler(appError =>
+{
+    appError.Run(async context => await ExceptionHandlerMiddleware.ExceptionHandler(context));
+});
 
 if (app.Environment.IsDevelopment())
 {

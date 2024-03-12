@@ -1,36 +1,46 @@
 ﻿using System.Net.Mime;
+using Domain.Exceptions;
 using Domain.Resources;
+using Microsoft.AspNetCore.Diagnostics;
 using Newtonsoft.Json;
 
 namespace WebApi.Modules.Middlewares;
 
-public class ExceptionHandlerMiddleware
+
+internal static class ExceptionHandlerMiddleware
 {
-    private readonly RequestDelegate _next;
-
-    public ExceptionHandlerMiddleware(RequestDelegate next)
+    public static async Task ExceptionHandler(HttpContext context)
     {
-        _next = next;
-    }
-    
-    public async Task Invoke(HttpContext context)
-    {
-        try
+        var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+            
+        context.Response.ContentType = MediaTypeNames.Application.Json;
+        switch (contextFeature?.Error)
         {
-            await _next(context);
-        }
-        catch (Exception error)
-        {
-            var response = context.Response;
-            response.ContentType = MediaTypeNames.Application.Json;
+            /*
+            case InvalidLoginException invalidLogin:
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                logger.Error($"Invalid Login: {JsonConvert.SerializeObject(invalidLogin.notificationError)}");
+                await context.Response.WriteAsync(JsonConvert.SerializeObject(invalidLogin.notificationError));
+                break;
 
-            switch (error)
-            {
-                default:
-                    response.StatusCode = StatusCodes.Status500InternalServerError;
-                    await response.WriteAsync(JsonConvert.SerializeObject(new { message = Messages.InternalServerError }));
-                    return;
-            }
+            case LoginConflictException loginConflict:
+                context.Response.StatusCode = StatusCodes.Status409Conflict;
+                logger.Error($"Login Conflict: {JsonConvert.SerializeObject(loginConflict.notificationError)}");
+                await context.Response.WriteAsync(JsonConvert.SerializeObject(loginConflict.notificationError));
+                break;
+            */
+            
+            case InvalidRequestException invalidRequest:
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                //logger.Error($"Invalid Request: {JsonConvert.SerializeObject(invalidRequest)}");
+                await context.Response.WriteAsync(JsonConvert.SerializeObject(invalidRequest));
+                break;
+            
+            default:
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                //logger.Error($"Unexpected Error: {contextFeature.Error}");
+                await context.Response.WriteAsync(JsonConvert.SerializeObject(Messages.InternalServerError + $" | traceId: {context.TraceIdentifier}"));
+                break;
         }
     }
 }
