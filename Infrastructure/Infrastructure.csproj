@@ -15,13 +15,14 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Migrations\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Reference Include="Microsoft.EntityFrameworkCore.SqlServer">
         <HintPath>..\..\..\..\.nuget\packages\microsoft.entityframeworkcore.sqlserver\8.0.3\lib\net8.0\Microsoft.EntityFrameworkCore.SqlServer.dll</HintPath>
       </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Migrations\20240318192855_DatabaseSetup.cs" />
+      <Compile Remove="Migrations\20240318192855_DatabaseSetup.Designer.cs" />
     </ItemGroup>
 
 </Project>

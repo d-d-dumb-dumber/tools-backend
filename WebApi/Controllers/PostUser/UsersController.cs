@@ -1,5 +1,7 @@
 ﻿using Domain.Models.Requests;
+using Infrastructure.DataAccess.Contexts;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.Controllers.PostUser;
 
@@ -8,7 +10,7 @@ namespace WebApi.Controllers.PostUser;
 /// </summary>
 [ApiController]
 [Route("[controller]")]
-public class UsersController : BaseController
+public class UsersController(ToolsContext toolsContext) : BaseController
 {
     /// <summary>
     /// Cria um usuário.
@@ -23,6 +25,7 @@ public class UsersController : BaseController
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<IActionResult> PostUser([FromBody] PostUserRequest request)
     {
+        await toolsContext.Database.MigrateAsync();
         ValidateRequest(request);
         //await _useCase.Execute(request);
 
