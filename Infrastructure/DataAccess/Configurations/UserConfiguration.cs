@@ -3,7 +3,7 @@ using Domain.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.DataAccess;
+namespace Infrastructure.DataAccess.Configurations;
 
 public sealed class UserConfiguration : IEntityTypeConfiguration<User>
 {
