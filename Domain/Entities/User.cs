@@ -2,7 +2,7 @@
 
 public class User(string name, string email, string password, string salt)
 {
-    public long Id { get; init; }
+    public ulong Id { get; init; }
     public string Name { get; } = name;
     public string Email { get; } = email;
     public string Password { get; } = password;
