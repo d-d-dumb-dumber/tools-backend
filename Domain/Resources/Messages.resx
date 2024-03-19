@@ -36,4 +36,7 @@
     <data name="InvalidLogin" xml:space="preserve">
         <value>Login already exists.</value>
     </data>
+    <data name="InvalidEmail" xml:space="preserve">
+        <value>Invalid email provided.</value>
+    </data>
 </root>
