@@ -33,4 +33,7 @@
     <data name="RequiredPassword" xml:space="preserve">
         <value>The field password is required.</value>
     </data>
+    <data name="InvalidLogin" xml:space="preserve">
+        <value>Login already exists.</value>
+    </data>
 </root>
