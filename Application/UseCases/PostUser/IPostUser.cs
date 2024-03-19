@@ -1,6 +1,8 @@
-﻿namespace Application.UseCases.PostUser;
+﻿using Domain.Models.Requests;
 
-public class IPostUser
+namespace Application.UseCases.PostUser;
+
+public interface IPostUser
 {
-    
+    public Task Execute(PostUserRequest request);
 }

@@ -7,7 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSQLServer(builder.Configuration);
+
+builder.Services
+    .AddSQLServer(builder.Configuration)
+    .AddUseCases();
 
 Configuration.SetConfiguration(builder.Configuration);
 

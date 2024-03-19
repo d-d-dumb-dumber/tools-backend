@@ -1,4 +1,5 @@
-﻿using Domain.Models.Requests;
+﻿using Application.UseCases.PostUser;
+using Domain.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers.PostUser;
@@ -8,7 +9,7 @@ namespace WebApi.Controllers.PostUser;
 /// </summary>
 [ApiController]
 [Route("[controller]")]
-public class UsersController : BaseController
+public class UsersController(IPostUser postUser) : BaseController
 {
     /// <summary>
     /// Cria um usuário.
@@ -24,8 +25,8 @@ public class UsersController : BaseController
     public async Task<IActionResult> PostUser([FromBody] PostUserRequest request)
     {
         ValidateRequest(request);
-        //await _useCase.Execute(request);
-
+        await postUser.Execute(request);
+        
         return NoContent();
     }
 }
