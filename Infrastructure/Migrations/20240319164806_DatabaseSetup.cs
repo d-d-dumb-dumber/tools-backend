@@ -16,7 +16,7 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<decimal>(type: "decimal(20,0)", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Salt = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
