@@ -1,4 +1,5 @@
-﻿using System.Net.Mime;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net.Mime;
 using Domain.Exceptions;
 using Domain.Resources;
 using Microsoft.AspNetCore.Diagnostics;
@@ -6,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace WebApi.Modules.Middlewares;
 
-
+[ExcludeFromCodeCoverage]
 internal static class ExceptionHandlerMiddleware
 {
     public static async Task ExceptionHandler(HttpContext context)
@@ -22,13 +23,14 @@ internal static class ExceptionHandlerMiddleware
                 logger.Error($"Invalid Login: {JsonConvert.SerializeObject(invalidLogin.notificationError)}");
                 await context.Response.WriteAsync(JsonConvert.SerializeObject(invalidLogin.notificationError));
                 break;
-
+            */
+            
             case LoginConflictException loginConflict:
                 context.Response.StatusCode = StatusCodes.Status409Conflict;
-                logger.Error($"Login Conflict: {JsonConvert.SerializeObject(loginConflict.notificationError)}");
+                //logger.Error($"Login Conflict: {JsonConvert.SerializeObject(loginConflict.notificationError)}");
                 await context.Response.WriteAsync(JsonConvert.SerializeObject(loginConflict.notificationError));
                 break;
-            */
+            
             
             case InvalidRequestException invalidRequest:
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;

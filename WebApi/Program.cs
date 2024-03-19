@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Domain.Utils;
 using WebApi.Modules.Middlewares;
 using WebApi.Modules.ServiceCollectionExtensions;
@@ -34,3 +35,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+[ExcludeFromCodeCoverage]
+// ReSharper disable once UnusedType.Global
+internal partial class Program;

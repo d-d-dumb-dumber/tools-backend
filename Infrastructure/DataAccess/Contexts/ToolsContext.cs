@@ -1,9 +1,11 @@
-﻿using Domain.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+using Domain.Entities;
 using Domain.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.DataAccess.Contexts;
 
+[ExcludeFromCodeCoverage]
 public class ToolsContext : DbContext
 {
 

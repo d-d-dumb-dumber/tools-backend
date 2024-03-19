@@ -9,9 +9,7 @@ public class ObjectValidator : IObjectModelValidator
 
     public void Validate(ActionContext actionContext, ValidationStateDictionary? validationState, string prefix, object? model)
     {
-        if (model == null) return;
-        
-        var context = new ValidationContext(model, serviceProvider: null, items: null);
+        var context = new ValidationContext(model!, serviceProvider: null, items: null);
         var results = new List<ValidationResult>();
 
         bool isValid = Validator.TryValidateObject(
