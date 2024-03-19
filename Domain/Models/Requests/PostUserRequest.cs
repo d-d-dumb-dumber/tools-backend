@@ -2,10 +2,10 @@
 
 namespace Domain.Models.Requests;
 
-public class PostUserRequest(string name, string email, string password)
+public class PostUserRequest(string username, string email, string password)
 {
     [Required(AllowEmptyStrings = false)]
-    public string Name { get; } = name;
+    public string Username { get; } = username;
 
     [Required(AllowEmptyStrings = false)]
     public string Email { get; } = email;
