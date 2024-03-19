@@ -6,8 +6,8 @@ namespace Infrastructure.DataAccess.Contexts;
 
 public class ToolsContext : DbContext
 {
-    
-    public virtual  DbSet<User>? Users { get; set; }
+
+    public virtual DbSet<User> Users { get; init; } = null!;
     
     public ToolsContext()
     {
