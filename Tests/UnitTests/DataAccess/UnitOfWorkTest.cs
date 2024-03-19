@@ -17,14 +17,14 @@ public class UnitOfWorkTest
     }
         
     [Fact]
-    public async Task TestingSucess_ValidateSave()
+    public async Task Test_Save()
     {
         await this._unitOfWork.Save();
         this._toolsContext.Verify(context => context.SaveChangesAsync(It.IsAny<CancellationToken>()));
     }
         
     [Fact]
-    public void TestingSucess_ValidateDispose()
+    public void Test_Dispose()
     {
         this._unitOfWork.Dispose();
         this._toolsContext.Verify(context => context.Dispose(), Times.Exactly(1));

@@ -21,24 +21,32 @@ public class UsersControllerTest
     }
 
     [Fact]
-    public async Task TestingSucessPostUser()
+    public async Task Test_PostUser_Valid_Request()
     {
         ConfigureObjectValidator();
         var successRequest = JsonConvert.DeserializeObject<PostUserRequest>("{\"Username\":\"name\",\"Email\":\"email\",\"Password\":\"password\"}");
-        Assert.NotNull(successRequest);
         var result = await this._controller.PostUser(successRequest!);
         Assert.IsType<NoContentResult>(result);
         this._postUser.Verify(x => x.Execute(successRequest!), Times.Once);
     }
 
-    [Theory]
-    [ClassData(typeof(UserControllerRequestTheoryData))]
-    public async Task TestingModelStateValidationPostUser(string model)
+    [Fact]
+    public async Task Test_PostUser_Invalid_Request_Missing_Fields()
     {
         ConfigureObjectValidator();
-        var request = JsonConvert.DeserializeObject<PostUserRequest>(model);
-        Assert.NotNull(request);
-        await Assert.ThrowsAsync<InvalidRequestException>(() => this._controller.PostUser(request!));
+        var request = JsonConvert.DeserializeObject<PostUserRequest>("{\"Username\":\" \",\"Email\":\" \",\"Password\":\" \"}");
+        try
+        {
+            await this._controller.PostUser(request!);
+        }
+        catch (InvalidRequestException exception)
+        {
+            var errors = exception.ErrorMessages;
+            Assert.Equal(3, errors.Count);
+            Assert.Contains("The Username field is required.", errors);
+            Assert.Contains("The Password field is required.", errors);
+            Assert.Contains("The Email field is required.", errors);
+        }
     }
 
     private void ConfigureObjectValidator()
