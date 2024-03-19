@@ -1,8 +1,8 @@
 ﻿using Domain.Models.Requests;
 
-namespace UnitTests.UseCases;
+namespace UnitTests.UseCases.CreateUser;
 
-public static class PostUserDataSetup
+public static class CreateUserDataSetup
 {
     public static readonly PostUserRequest validUser = new("usuario", "email", "senha");
 }

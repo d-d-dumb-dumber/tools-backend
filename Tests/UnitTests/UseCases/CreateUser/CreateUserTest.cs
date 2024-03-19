@@ -1,5 +1,4 @@
-﻿using Application.UseCases.PostUser;
-using Domain.DTOs;
+﻿using Domain.DTOs;
 using Domain.Exceptions;
 using Domain.Repositories;
 using Domain.UnitOfWork;
@@ -7,20 +6,20 @@ using Domain.Utils;
 using Moq;
 using Xunit;
 
-namespace UnitTests.UseCases;
+namespace UnitTests.UseCases.CreateUser;
 
 public class PostUserUseCaseTest
     {
         private readonly Mock<IUserRepository> _userRepository;
         private readonly Mock<IUnitOfWork> _unitOfWork;
-        private readonly PostUser _useCase;
+        private readonly Application.UseCases.CreateUser.CreateUser _useCase;
 
         public PostUserUseCaseTest()
         {
             Configuration.SetConfiguration(TestConfigurationBuilder.BuildTestConfiguration());
             this._userRepository = new Mock<IUserRepository>();
             this._unitOfWork = new Mock<IUnitOfWork>();
-            this._useCase = new PostUser(_userRepository.Object, _unitOfWork.Object);
+            this._useCase = new Application.UseCases.CreateUser.CreateUser(_userRepository.Object, _unitOfWork.Object);
         }
 
         [Fact]
@@ -28,12 +27,12 @@ public class PostUserUseCaseTest
         {
             UserDto user = new("usuario", "email", "10", "10");
 
-            await _useCase.Execute(PostUserDataSetup.validUser);
+            await _useCase.Execute(CreateUserDataSetup.validUser);
             
             this._userRepository.Verify(repo => repo.AddUser(user), Times.Once);
             this._userRepository.Verify(repo => repo.GetUser("usuario"), Times.Once);
             this._unitOfWork.Verify(x => x.Save(), Times.Once);
-            Assert.Equal(PostUserDataSetup.validUser.Username, user.Username);
+            Assert.Equal(CreateUserDataSetup.validUser.Username, user.Username);
         }
 
         [Fact]
@@ -43,12 +42,12 @@ public class PostUserUseCaseTest
             
             UserDto user = new("usuario", "email", "10", "10");
             
-            await Assert.ThrowsAsync<LoginConflictException>(() => _useCase.Execute(PostUserDataSetup.validUser));
+            await Assert.ThrowsAsync<LoginConflictException>(() => _useCase.Execute(CreateUserDataSetup.validUser));
             
             this._userRepository.Verify(repo => repo.GetUser("usuario"), Times.Once);
             this._userRepository.Verify(repo => repo.AddUser(user), Times.Never);
             this._unitOfWork.Verify(x => x.Save(), Times.Never);
-            Assert.Equal(PostUserDataSetup.validUser.Username, user.Username);
+            Assert.Equal(CreateUserDataSetup.validUser.Username, user.Username);
         }
 
         private void ConfigureUserRepositoryForExistingLogin()

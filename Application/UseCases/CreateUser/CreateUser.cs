@@ -5,9 +5,9 @@ using Domain.Repositories;
 using Domain.Resources;
 using Domain.UnitOfWork;
 
-namespace Application.UseCases.PostUser;
+namespace Application.UseCases.CreateUser;
 
-public class PostUser(IUserRepository repository, IUnitOfWork unitOfWork) : IPostUser
+public class CreateUser(IUserRepository repository, IUnitOfWork unitOfWork) : ICreateUser
 {
     public async Task Execute(PostUserRequest request)
     {

@@ -1,24 +1,24 @@
-﻿using Application.UseCases.PostUser;
+﻿using Application.UseCases.CreateUser;
 using Domain.Exceptions;
 using Domain.Models.Requests;
 using Domain.Resources;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Newtonsoft.Json;
-using WebApi.Controllers.PostUser;
+using WebApi.Controllers.CreateUser;
 using Xunit;
 
-namespace UnitTests.Controllers.PostUser;
+namespace UnitTests.Controllers.CreateUser;
 
 public class UsersControllerTest
 {
     private readonly UsersController _controller;
-    private readonly Mock<IPostUser> _postUser;
+    private readonly Mock<ICreateUser> _createUser;
 
     public UsersControllerTest()
     {
-        this._postUser = new Mock<IPostUser>();
-        this._controller = new UsersController(_postUser.Object);
+        this._createUser = new Mock<ICreateUser>();
+        this._controller = new UsersController(_createUser.Object);
     }
 
     [Fact]
@@ -27,8 +27,8 @@ public class UsersControllerTest
         ConfigureObjectValidator();
         var successRequest = JsonConvert.DeserializeObject<PostUserRequest>("{\"Username\":\"name\",\"Email\":\"email@email.com\",\"Password\":\"password\"}");
         var result = await this._controller.PostUser(successRequest!);
-        Assert.IsType<NoContentResult>(result);
-        this._postUser.Verify(x => x.Execute(successRequest!), Times.Once);
+        Assert.IsType<CreatedResult>(result);
+        this._createUser.Verify(x => x.Execute(successRequest!), Times.Once);
     }
 
     [Fact]

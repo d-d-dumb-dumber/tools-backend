@@ -38,6 +38,9 @@ app.MapControllers();
 
 app.Run();
 
-[ExcludeFromCodeCoverage]
+namespace WebApi
+{
+    [ExcludeFromCodeCoverage]
 // ReSharper disable once UnusedType.Global
-internal partial class Program;
+    internal partial class Program;
+}

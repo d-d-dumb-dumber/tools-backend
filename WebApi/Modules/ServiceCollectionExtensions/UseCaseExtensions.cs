@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Application.UseCases.PostUser;
+using Application.UseCases.CreateUser;
 
 namespace WebApi.Modules.ServiceCollectionExtensions;
 
@@ -8,7 +8,7 @@ public static class UseCasesExtensions
 {
     public static IServiceCollection AddUseCases(this IServiceCollection services)
     {
-        services.AddScoped<IPostUser, PostUser>();
+        services.AddScoped<ICreateUser, CreateUser>();
 
         return services;
     }

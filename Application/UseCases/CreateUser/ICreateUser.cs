@@ -1,8 +1,8 @@
 ﻿using Domain.Models.Requests;
 
-namespace Application.UseCases.PostUser;
+namespace Application.UseCases.CreateUser;
 
-public interface IPostUser
+public interface ICreateUser
 {
     public Task Execute(PostUserRequest request);
 }
