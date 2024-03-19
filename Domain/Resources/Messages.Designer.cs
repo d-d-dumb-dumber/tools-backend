@@ -69,6 +69,24 @@ namespace Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email already registered..
+        /// </summary>
+        public static string ConflictEmail {
+            get {
+                return ResourceManager.GetString("ConflictEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username already registered..
+        /// </summary>
+        public static string ConflictUsername {
+            get {
+                return ResourceManager.GetString("ConflictUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to System unavailable. Please try again later.
         /// </summary>
         public static string InternalServerError {
@@ -83,15 +101,6 @@ namespace Domain.Resources {
         public static string InvalidEmail {
             get {
                 return ResourceManager.GetString("InvalidEmail", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Login already exists..
-        /// </summary>
-        public static string InvalidLogin {
-            get {
-                return ResourceManager.GetString("InvalidLogin", resourceCulture);
             }
         }
         

@@ -33,10 +33,13 @@
     <data name="RequiredPassword" xml:space="preserve">
         <value>The field password is required.</value>
     </data>
-    <data name="InvalidLogin" xml:space="preserve">
-        <value>Login already exists.</value>
+    <data name="ConflictUsername" xml:space="preserve">
+        <value>Username already registered.</value>
     </data>
     <data name="InvalidEmail" xml:space="preserve">
         <value>Invalid email provided.</value>
+    </data>
+    <data name="ConflictEmail" xml:space="preserve">
+        <value>Email already registered.</value>
     </data>
 </root>

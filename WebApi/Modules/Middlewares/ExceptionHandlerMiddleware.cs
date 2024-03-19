@@ -28,7 +28,7 @@ internal static class ExceptionHandlerMiddleware
             case LoginConflictException loginConflict:
                 context.Response.StatusCode = StatusCodes.Status409Conflict;
                 //logger.Error($"Login Conflict: {JsonConvert.SerializeObject(loginConflict.notificationError)}");
-                await context.Response.WriteAsync(JsonConvert.SerializeObject(loginConflict.notificationError));
+                await context.Response.WriteAsync(JsonConvert.SerializeObject(loginConflict));
                 break;
             
             

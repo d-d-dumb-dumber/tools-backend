@@ -1,9 +1,12 @@
-﻿namespace Domain.Exceptions;
+﻿using Newtonsoft.Json;
 
-public class LoginConflictException(NotificationError notificationError) : Exception
+namespace Domain.Exceptions;
+
+[JsonObject(MemberSerialization.OptIn)]
+public class LoginConflictException(IEnumerable<string> errors) : Exception
 {
-    public readonly NotificationError notificationError = notificationError;
+    [JsonProperty]
+    public IList<string> ErrorMessages { get; } = errors.ToList();
 
-    public LoginConflictException(string errorMessage) : this(new NotificationError(errorMessage)) { }
-    
+    public LoginConflictException(string message) : this(new[] { message }) { }
 }

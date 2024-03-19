@@ -14,9 +14,16 @@ public class UserRepository(ToolsContext context) : IUserRepository
         await context.Users.AddAsync(userEntity);
     }
 
-    public async Task<UserDto?> GetUser(string? username, string? email)
+    public async Task<UserDto?> GetUserByUsername(string username)
     {
-        var user = await context.Users.Where(user => user.Username == username || user.Email == email)
+        var user = await context.Users.Where(user => user.Username == username)
+            .SingleOrDefaultAsync();
+        return user == null ? null : new UserDto(user);
+    }
+
+    public async Task<UserDto?> GetUserByEmail(string email)
+    {
+        var user = await context.Users.Where(user => user.Email == email)
             .SingleOrDefaultAsync();
         return user == null ? null : new UserDto(user);
     }
