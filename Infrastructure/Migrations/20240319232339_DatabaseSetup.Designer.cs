@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ToolsContext))]
-    [Migration("20240319173217_DatabaseSetup")]
+    [Migration("20240319232339_DatabaseSetup")]
     partial class DatabaseSetup
     {
         /// <inheritdoc />
@@ -39,7 +39,8 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<string>("Salt")
                         .IsRequired()
@@ -54,6 +55,9 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
                         .IsUnique();
 
                     b.ToTable("User", (string)null);

@@ -4,5 +4,5 @@ namespace Application.UseCases.CreateUser;
 
 public interface ICreateUser
 {
-    public Task Execute(PostUserRequest request);
+    public Task Execute(CreateUserRequest request);
 }

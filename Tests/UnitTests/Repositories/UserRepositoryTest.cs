@@ -1,4 +1,6 @@
-﻿using Infrastructure.DataAccess.Contexts;
+﻿using Domain.Exceptions;
+using Domain.Resources;
+using Infrastructure.DataAccess.Contexts;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
@@ -9,7 +11,7 @@ public class UserRepositoryTest
 {
     
     [Fact]
-    public async Task Test_AddUser()
+    public async Task Test_Add_New_User()
     {
         await using var context = StartDatabase();
         var repository = new UserRepository(context);
@@ -19,11 +21,28 @@ public class UserRepositoryTest
     }
     
     [Fact]
-    public async Task Test_Get_Existing_User()
+    public async Task Test_Add_Existing_Username_User()
     {
         await using var context = StartDatabase();
         var repository = new UserRepository(context);
-        var result = await repository.GetUser(DataSetup.EXISTING_USERNAME);
+        try
+        {
+            await repository.AddUser(DataSetup.UserDto);
+            await context.SaveChangesAsync();
+        }
+        catch (LoginConflictException exception)
+        {
+            Assert.DoesNotContain(DataSetup.NewUser, context.Users);
+            Assert.Equal(Messages.InvalidLogin, exception.Message);
+        }
+    }
+    
+    [Fact]
+    public async Task Test_Get_Existing_User_By_Username()
+    {
+        await using var context = StartDatabase();
+        var repository = new UserRepository(context);
+        var result = await repository.GetUser(DataSetup.EXISTING_USERNAME, null);
         Assert.Equal(DataSetup.UserDto, result);
     }
     
@@ -32,7 +51,7 @@ public class UserRepositoryTest
     {
         await using var context = StartDatabase();
         var repository = new UserRepository(context);
-        var result = await repository.GetUser(DataSetup.NON_EXISTING_USERNAME);
+        var result = await repository.GetUser(DataSetup.NON_EXISTING_USERNAME, null);
         Assert.Null(result);
     }
 

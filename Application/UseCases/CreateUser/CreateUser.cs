@@ -9,9 +9,9 @@ namespace Application.UseCases.CreateUser;
 
 public class CreateUser(IUserRepository repository, IUnitOfWork unitOfWork) : ICreateUser
 {
-    public async Task Execute(PostUserRequest request)
+    public async Task Execute(CreateUserRequest request)
     {
-        if (await repository.GetUser(request.Username) != null)
+        if (await repository.GetUser(request.Username, request.Email) != null)
         {
             throw new LoginConflictException(Messages.InvalidLogin);
         }

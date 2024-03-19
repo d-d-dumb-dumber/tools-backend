@@ -18,7 +18,7 @@ namespace Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Username = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     Salt = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
                 },
                 constraints: table =>
@@ -30,6 +30,12 @@ namespace Infrastructure.Migrations
                 name: "IX_User_Email",
                 table: "User",
                 column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Username",
+                table: "User",
+                column: "Username",
                 unique: true);
         }
 

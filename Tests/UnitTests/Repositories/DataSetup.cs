@@ -10,5 +10,7 @@ public static class DataSetup
     public static readonly UserDto UserDto = new ("username", "email", "password", "salt");
     public static readonly User User = new ("username", "email", "password", "salt");
     public const string EXISTING_USERNAME = "username";
+    public const string EXISTING_EMAIL = "email";
     public const string NON_EXISTING_USERNAME = "invalidUsername";
+    public const string NON_EXISTING_EMAIL = "invalidEmail";
 }

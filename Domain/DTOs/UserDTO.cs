@@ -28,7 +28,7 @@ namespace Domain.DTOs
             this.Salt = salt;
         }
 
-        public UserDto(PostUserRequest request)
+        public UserDto(CreateUserRequest request)
         {
             var size = Configuration.GetConfigurationValue<uint>(ConfigurationConstants.USER_SALT_SIZE);
             var salt = Cryptography.GenerateSalt(size);

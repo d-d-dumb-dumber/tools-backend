@@ -30,7 +30,7 @@ public class PostUserUseCaseTest
             await _useCase.Execute(CreateUserDataSetup.validUser);
             
             this._userRepository.Verify(repo => repo.AddUser(user), Times.Once);
-            this._userRepository.Verify(repo => repo.GetUser("usuario"), Times.Once);
+            this._userRepository.Verify(repo => repo.GetUser("usuario", null), Times.Once);
             this._unitOfWork.Verify(x => x.Save(), Times.Once);
             Assert.Equal(CreateUserDataSetup.validUser.Username, user.Username);
         }
@@ -44,7 +44,7 @@ public class PostUserUseCaseTest
             
             await Assert.ThrowsAsync<LoginConflictException>(() => _useCase.Execute(CreateUserDataSetup.validUser));
             
-            this._userRepository.Verify(repo => repo.GetUser("usuario"), Times.Once);
+            this._userRepository.Verify(repo => repo.GetUser("usuario", null), Times.Once);
             this._userRepository.Verify(repo => repo.AddUser(user), Times.Never);
             this._unitOfWork.Verify(x => x.Save(), Times.Never);
             Assert.Equal(CreateUserDataSetup.validUser.Username, user.Username);
@@ -52,6 +52,6 @@ public class PostUserUseCaseTest
 
         private void ConfigureUserRepositoryForExistingLogin()
         {
-            this._userRepository.Setup(repo => repo.GetUser("usuario")).ReturnsAsync(new UserDto("usuario", "email", "10", "10"));
+            this._userRepository.Setup(repo => repo.GetUser("usuario", null)).ReturnsAsync(new UserDto("usuario", "email", "10", "10"));
         }
     }

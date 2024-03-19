@@ -25,8 +25,8 @@ public class UsersControllerTest
     public async Task Test_PostUser_Valid_Request()
     {
         ConfigureObjectValidator();
-        var successRequest = JsonConvert.DeserializeObject<PostUserRequest>("{\"Username\":\"name\",\"Email\":\"email@email.com\",\"Password\":\"password\"}");
-        var result = await this._controller.PostUser(successRequest!);
+        var successRequest = JsonConvert.DeserializeObject<CreateUserRequest>("{\"Username\":\"name\",\"Email\":\"email@email.com\",\"Password\":\"password\"}");
+        var result = await this._controller.CreateUser(successRequest!);
         Assert.IsType<CreatedResult>(result);
         this._createUser.Verify(x => x.Execute(successRequest!), Times.Once);
     }
@@ -35,10 +35,10 @@ public class UsersControllerTest
     public async Task Test_PostUser_Invalid_Request_Missing_Fields()
     {
         ConfigureObjectValidator();
-        var request = JsonConvert.DeserializeObject<PostUserRequest>("{\"Username\":\" \",\"Email\":\" \",\"Password\":\" \"}");
+        var request = JsonConvert.DeserializeObject<CreateUserRequest>("{\"Username\":\" \",\"Email\":\" \",\"Password\":\" \"}");
         try
         {
-            await this._controller.PostUser(request!);
+            await this._controller.CreateUser(request!);
         }
         catch (InvalidRequestException exception)
         {
@@ -58,10 +58,10 @@ public class UsersControllerTest
     public async Task Test_PostUser_Invalid_Request_Invalid_Email_Format(string? requestModel)
     {
         ConfigureObjectValidator();
-        var request = JsonConvert.DeserializeObject<PostUserRequest>(requestModel!);
+        var request = JsonConvert.DeserializeObject<CreateUserRequest>(requestModel!);
         try
         {
-            await this._controller.PostUser(request!);
+            await this._controller.CreateUser(request!);
         }
         catch (InvalidRequestException exception)
         {
