@@ -12,11 +12,12 @@ namespace UnitTests.Controllers.PostUser;
 public class UsersControllerTest
 {
     private readonly UsersController _controller;
+    private readonly Mock<IPostUser> _postUser;
 
     public UsersControllerTest()
     {
-        var postUser = new Mock<IPostUser>();
-        this._controller = new UsersController(postUser.Object);
+        this._postUser = new Mock<IPostUser>();
+        this._controller = new UsersController(_postUser.Object);
     }
 
     [Fact]
@@ -27,6 +28,7 @@ public class UsersControllerTest
         Assert.NotNull(successRequest);
         var result = await this._controller.PostUser(successRequest!);
         Assert.IsType<NoContentResult>(result);
+        this._postUser.Verify(x => x.Execute(successRequest!), Times.Once);
     }
 
     [Theory]
