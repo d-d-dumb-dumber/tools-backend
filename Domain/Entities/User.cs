@@ -1,16 +1,20 @@
-﻿namespace Domain.Entities;
+﻿using Domain.DTOs;
 
-public class User(string name, string email, string password, string salt)
+namespace Domain.Entities;
+
+public class User(string username, string email, string password, string salt)
 {
     public ulong Id { get; init; }
-    public string Name { get; } = name;
+    public string Username { get; } = username;
     public string Email { get; } = email;
     public string Password { get; } = password;
     public string Salt { get; } = salt;
 
+    public User(UserDto userDto) : this(userDto.Username, userDto.Email, userDto.Password, userDto.Salt) { }
+
     protected bool Equals(User other)
     {
-        return Name == other.Name && Email == other.Email && Password == other.Password && Salt == other.Salt;
+        return Username == other.Username && Email == other.Email && Password == other.Password && Salt == other.Salt;
     }
 
     public override bool Equals(object? obj)
@@ -22,7 +26,7 @@ public class User(string name, string email, string password, string salt)
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Name, Email, Password, Salt);
+        return HashCode.Combine(Username, Email, Password, Salt);
     }
 
     public static bool operator ==(User? left, User? right)
