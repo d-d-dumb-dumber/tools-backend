@@ -1,3 +1,4 @@
+using Domain.Utils;
 using WebApi.Modules.Middlewares;
 using WebApi.Modules.ServiceCollectionExtensions;
 
@@ -7,6 +8,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSQLServer(builder.Configuration);
+
+Configuration.SetConfiguration(builder.Configuration);
 
 var app = builder.Build();
 
