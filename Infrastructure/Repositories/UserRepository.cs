@@ -27,4 +27,11 @@ public class UserRepository(ToolsContext context) : IUserRepository
             .SingleOrDefaultAsync();
         return user == null ? null : new UserDto(user);
     }
+
+    public async Task<UserDto?> GetUserByUsernameOrEmail(string usernameOrEmail)
+    {
+        var user = await context.Users.Where(user => user.Email == usernameOrEmail || user.Username == usernameOrEmail)
+            .SingleOrDefaultAsync();
+        return user == null ? null : new UserDto(user);
+    }
 }
