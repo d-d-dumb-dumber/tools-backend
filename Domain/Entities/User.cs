@@ -2,15 +2,15 @@
 
 namespace Domain.Entities;
 
-public class User(string username, string email, string password, string salt)
+public class User(string username, string email, string password, string salt, ulong? Id = null)
 {
-    public ulong Id { get; init; }
+    public ulong? Id { get; } = Id;
     public string Username { get; } = username;
     public string Email { get; } = email;
     public string Password { get; } = password;
     public string Salt { get; } = salt;
 
-    public User(UserDto userDto) : this(userDto.Username, userDto.Email, userDto.Password, userDto.Salt) { }
+    public User(UserDto userDto) : this(userDto.Username, userDto.Email, userDto.Password, userDto.Salt, userDto.Id) { }
 
     protected bool Equals(User other)
     {
