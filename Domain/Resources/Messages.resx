@@ -42,4 +42,7 @@
     <data name="ConflictEmail" xml:space="preserve">
         <value>Email already registered.</value>
     </data>
+    <data name="InvalidUsername" xml:space="preserve">
+        <value>Invalid username provided.</value>
+    </data>
 </root>

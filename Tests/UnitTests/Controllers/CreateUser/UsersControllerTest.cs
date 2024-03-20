@@ -1,7 +1,11 @@
-﻿using Application.UseCases.CreateUser;
+﻿using System.Text.RegularExpressions;
+using Application.UseCases.CreateUser;
+using Domain.Constants;
 using Domain.Exceptions;
 using Domain.Models.Requests;
+using Domain.Models.Validators;
 using Domain.Resources;
+using Domain.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Newtonsoft.Json;
@@ -32,7 +36,7 @@ public class UsersControllerTest
     }
 
     [Fact]
-    public async Task Test_PostUser_Invalid_Request_Missing_Fields()
+    public async Task Test_PostUser_Invalid_Request_Empty_Fields()
     {
         ConfigureObjectValidator();
         var request = JsonConvert.DeserializeObject<CreateUserRequest>("{\"Username\":\" \",\"Email\":\" \",\"Password\":\" \"}");
@@ -51,7 +55,30 @@ public class UsersControllerTest
         Assert.Equal(3, errors.Count);
         Assert.Contains("The Username field is required.", errors);
         Assert.Contains("The Password field is required.", errors);
-        Assert.Contains(Messages.InvalidEmail, errors);
+        Assert.Contains("The Email field is required.", errors);
+    }
+
+    [Fact]
+    public async Task Test_PostUser_Invalid_Request_Missing_Fields()
+    {
+        ConfigureObjectValidator();
+        var request = JsonConvert.DeserializeObject<CreateUserRequest>("{}");
+        InvalidRequestException? ex = null;
+        try
+        {
+            await this._controller.CreateUser(request!);
+        }
+        catch (InvalidRequestException exception)
+        {
+            ex = exception;
+        }
+        
+        Assert.NotNull(ex);
+        var errors = ex!.ErrorMessages;
+        Assert.Equal(3, errors.Count);
+        Assert.Contains("The Username field is required.", errors);
+        Assert.Contains("The Password field is required.", errors);
+        Assert.Contains("The Email field is required.", errors);
     }
 
     [Theory]
@@ -77,6 +104,42 @@ public class UsersControllerTest
         var errors = ex!.ErrorMessages;
         Assert.Equal(1, errors.Count);
         Assert.Contains(Messages.InvalidEmail, errors);
+    }
+
+    [Theory]
+    [InlineData("{\"Username\":\"Username Longe\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    [InlineData("{\"Username\":\"Username@\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    [InlineData("{\"Username\":\"Username'\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    [InlineData("{\"Username\":\"Username\\\"\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    [InlineData("{\"Username\":\"Username/\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    [InlineData("{\"Username\":\"Username\\\\\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    [InlineData("{\"Username\":\"Username;\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    [InlineData("{\"Username\":\"Username:\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    [InlineData("{\"Username\":\"User[name:\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    [InlineData("{\"Username\":\"User]name:\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    [InlineData("{\"Username\":\"User{name:\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    [InlineData("{\"Username\":\"User}name:\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    [InlineData("{\"Username\":\"User(name:\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    [InlineData("{\"Username\":\"User)name:\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    [InlineData("{\"Username\":\"User|name:\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    public async Task Test_PostUser_Invalid_Request_Invalid_Username_Format(string? requestModel)
+    {
+        ConfigureObjectValidator();
+        var request = JsonConvert.DeserializeObject<CreateUserRequest>(requestModel!);
+        InvalidRequestException? ex = null;
+        try
+        {
+            await this._controller.CreateUser(request!);
+        }
+        catch (InvalidRequestException exception)
+        {
+            ex = exception;
+        }
+        
+        Assert.NotNull(ex);
+        var errors = ex!.ErrorMessages;
+        Assert.Equal(1, errors.Count);
+        Assert.Contains(Messages.InvalidUsername, errors);
     }
 
     private void ConfigureObjectValidator()
