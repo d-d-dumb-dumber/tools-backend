@@ -55,6 +55,28 @@ public class UsersControllerTest
     }
 
     [Fact]
+    public async Task Test_PostUser_Invalid_Request_Fields_Out_Of_Max_Range()
+    {
+        ConfigureObjectValidator();
+        var request = JsonConvert.DeserializeObject<CreateUserRequest>("{\"Username\":\"becauseofyouIneverhsjhdjdshjsdds\",\"Email\":\"email@email.com\",\"Password\":\"becauseofyouIneverhsjhdjdshjsdds\"}");
+        InvalidRequestException? ex = null;
+        try
+        {
+            await this._controller.CreateUser(request!);
+        }
+        catch (InvalidRequestException exception)
+        {
+            ex = exception;
+        }
+        
+        Assert.NotNull(ex);
+        var errors = ex!.ErrorMessages;
+        Assert.Equal(2, errors.Count);
+        Assert.Contains("The field Username must be a string or array type with a maximum length of '25'.", errors);
+        Assert.Contains("The field Password must be a string or array type with a maximum length of '25'.", errors);
+    }
+
+    [Fact]
     public async Task Test_PostUser_Invalid_Request_Missing_Fields()
     {
         ConfigureObjectValidator();
