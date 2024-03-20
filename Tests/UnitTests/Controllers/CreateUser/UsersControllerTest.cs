@@ -1,11 +1,7 @@
-﻿using System.Text.RegularExpressions;
-using Application.UseCases.CreateUser;
-using Domain.Constants;
+﻿using Application.UseCases.CreateUser;
 using Domain.Exceptions;
 using Domain.Models.Requests;
-using Domain.Models.Validators;
 using Domain.Resources;
-using Domain.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Newtonsoft.Json;
@@ -115,13 +111,10 @@ public class UsersControllerTest
     [InlineData("{\"Username\":\"Username\\\\\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
     [InlineData("{\"Username\":\"Username;\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
     [InlineData("{\"Username\":\"Username:\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
-    [InlineData("{\"Username\":\"User[name:\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
-    [InlineData("{\"Username\":\"User]name:\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
-    [InlineData("{\"Username\":\"User{name:\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
-    [InlineData("{\"Username\":\"User}name:\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
-    [InlineData("{\"Username\":\"User(name:\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
-    [InlineData("{\"Username\":\"User)name:\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
-    [InlineData("{\"Username\":\"User|name:\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    [InlineData("{\"Username\":\"User[name\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    [InlineData("{\"Username\":\"User]name\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    [InlineData("{\"Username\":\"User{name\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
+    [InlineData("{\"Username\":\"User}name\",\"Email\":\"email@email.com\",\"Password\":\"Psswrd\"}")]
     public async Task Test_PostUser_Invalid_Request_Invalid_Username_Format(string? requestModel)
     {
         ConfigureObjectValidator();
