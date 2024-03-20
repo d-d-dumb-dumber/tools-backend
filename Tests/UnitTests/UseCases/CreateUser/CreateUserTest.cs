@@ -23,35 +23,48 @@ public class PostUserUseCaseTest
         }
 
         [Fact]
-        public async Task Test_PostUser()
+        public async Task Test_Create_New_User()
         {
             UserDto user = new("usuario", "email", "10", "10");
 
             await _useCase.Execute(CreateUserDataSetup.validUser);
             
             this._userRepository.Verify(repo => repo.AddUser(user), Times.Once);
-            this._userRepository.Verify(repo => repo.GetUser("usuario", null), Times.Once);
+            this._userRepository.Verify(repo => repo.GetUserByUsername("usuario"), Times.Once);
+            this._userRepository.Verify(repo => repo.GetUserByEmail("email"), Times.Once);
             this._unitOfWork.Verify(x => x.Save(), Times.Once);
-            Assert.Equal(CreateUserDataSetup.validUser.Username, user.Username);
         }
 
         [Fact]
-        public async Task Test_PostUser_Existing_Login()
+        public async Task Test_Create_User_Existing_Username_And_Email()
         {
             ConfigureUserRepositoryForExistingLogin();
             
             UserDto user = new("usuario", "email", "10", "10");
-            
-            await Assert.ThrowsAsync<LoginConflictException>(() => _useCase.Execute(CreateUserDataSetup.validUser));
-            
-            this._userRepository.Verify(repo => repo.GetUser("usuario", null), Times.Once);
+            LoginConflictException? ex = null;
+            try
+            {
+                await _useCase.Execute(CreateUserDataSetup.validUser);
+            }
+            catch (LoginConflictException exception)
+            {
+                ex = exception;
+            }
+            Assert.NotNull(ex);
+            this._userRepository.Verify(repo => repo.GetUserByUsername("usuario"), Times.Once);
+            this._userRepository.Verify(repo => repo.GetUserByEmail("email"), Times.Once);
             this._userRepository.Verify(repo => repo.AddUser(user), Times.Never);
             this._unitOfWork.Verify(x => x.Save(), Times.Never);
-            Assert.Equal(CreateUserDataSetup.validUser.Username, user.Username);
+            Assert.Equal(2, ex!.ErrorMessages.Count);
+            Assert.Contains("Email already registered.", ex!.ErrorMessages);
+            Assert.Contains("Username already registered.", ex!.ErrorMessages);
         }
 
         private void ConfigureUserRepositoryForExistingLogin()
         {
-            this._userRepository.Setup(repo => repo.GetUser("usuario", null)).ReturnsAsync(new UserDto("usuario", "email", "10", "10"));
+            this._userRepository.Setup(repo => repo.GetUserByUsername("usuario")).ReturnsAsync(new UserDto("usuario", 
+                "email", "10", "10"));
+            this._userRepository.Setup(repo => repo.GetUserByEmail("email")).ReturnsAsync(new UserDto("usuario", 
+                "email", "10", "10"));
         }
     }

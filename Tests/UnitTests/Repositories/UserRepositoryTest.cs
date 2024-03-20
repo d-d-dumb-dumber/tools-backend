@@ -33,7 +33,7 @@ public class UserRepositoryTest
         catch (LoginConflictException exception)
         {
             Assert.DoesNotContain(DataSetup.NewUser, context.Users);
-            Assert.Equal(Messages.InvalidLogin, exception.Message);
+            Assert.Equal(Messages.ConflictUsername, exception.Message);
         }
     }
     
@@ -42,16 +42,34 @@ public class UserRepositoryTest
     {
         await using var context = StartDatabase();
         var repository = new UserRepository(context);
-        var result = await repository.GetUser(DataSetup.EXISTING_USERNAME, null);
+        var result = await repository.GetUserByUsername(DataSetup.EXISTING_USERNAME);
         Assert.Equal(DataSetup.UserDto, result);
     }
     
     [Fact]
-    public async Task Test_Get_Non_Existing_User()
+    public async Task Test_Get_Non_Existing_Username()
     {
         await using var context = StartDatabase();
         var repository = new UserRepository(context);
-        var result = await repository.GetUser(DataSetup.NON_EXISTING_USERNAME, null);
+        var result = await repository.GetUserByUsername(DataSetup.NON_EXISTING_USERNAME);
+        Assert.Null(result);
+    }
+    
+    [Fact]
+    public async Task Test_Get_Existing_User_By_Email()
+    {
+        await using var context = StartDatabase();
+        var repository = new UserRepository(context);
+        var result = await repository.GetUserByEmail(DataSetup.EXISTING_EMAIL);
+        Assert.Equal(DataSetup.UserDto, result);
+    }
+    
+    [Fact]
+    public async Task Test_Get_Non_Existing_Email()
+    {
+        await using var context = StartDatabase();
+        var repository = new UserRepository(context);
+        var result = await repository.GetUserByEmail(DataSetup.NON_EXISTING_EMAIL);
         Assert.Null(result);
     }
 

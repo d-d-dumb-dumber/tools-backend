@@ -11,13 +11,13 @@ public class CreateUser(IUserRepository repository, IUnitOfWork unitOfWork) : IC
 {
     public async Task Execute(CreateUserRequest request)
     {
-        ValidateExistingUser(request);
+        await ValidateExistingUser(request);
         UserDto user = new(request);
         await repository.AddUser(user);
         await unitOfWork.Save();
     }
 
-    private async void ValidateExistingUser(CreateUserRequest request)
+    private async Task ValidateExistingUser(CreateUserRequest request)
     {
         var isValid = true;
         var errors = new List<string>();
@@ -32,8 +32,9 @@ public class CreateUser(IUserRepository repository, IUnitOfWork unitOfWork) : IC
             isValid = false;
             errors.Add(Messages.ConflictEmail);
         }
-
-        if (!isValid) throw new LoginConflictException(errors);
+        if (isValid) return;
+        
+        throw new LoginConflictException(errors);
     }
 }
 

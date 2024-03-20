@@ -36,18 +36,22 @@ public class UsersControllerTest
     {
         ConfigureObjectValidator();
         var request = JsonConvert.DeserializeObject<CreateUserRequest>("{\"Username\":\" \",\"Email\":\" \",\"Password\":\" \"}");
+        InvalidRequestException? ex = null;
         try
         {
             await this._controller.CreateUser(request!);
         }
         catch (InvalidRequestException exception)
         {
-            var errors = exception.ErrorMessages;
-            Assert.Equal(3, errors.Count);
-            Assert.Contains("The Username field is required.", errors);
-            Assert.Contains("The Password field is required.", errors);
-            Assert.Contains(Messages.InvalidEmail, errors);
+            ex = exception;
         }
+        
+        Assert.NotNull(ex);
+        var errors = ex!.ErrorMessages;
+        Assert.Equal(3, errors.Count);
+        Assert.Contains("The Username field is required.", errors);
+        Assert.Contains("The Password field is required.", errors);
+        Assert.Contains(Messages.InvalidEmail, errors);
     }
 
     [Theory]
@@ -59,16 +63,20 @@ public class UsersControllerTest
     {
         ConfigureObjectValidator();
         var request = JsonConvert.DeserializeObject<CreateUserRequest>(requestModel!);
+        InvalidRequestException? ex = null;
         try
         {
             await this._controller.CreateUser(request!);
         }
         catch (InvalidRequestException exception)
         {
-            var errors = exception.ErrorMessages;
-            Assert.Equal(1, errors.Count);
-            Assert.Contains(Messages.InvalidEmail, errors);
+            ex = exception;
         }
+        
+        Assert.NotNull(ex);
+        var errors = ex!.ErrorMessages;
+        Assert.Equal(1, errors.Count);
+        Assert.Contains(Messages.InvalidEmail, errors);
     }
 
     private void ConfigureObjectValidator()

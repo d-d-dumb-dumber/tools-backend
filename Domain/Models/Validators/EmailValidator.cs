@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Net.Mail;
 using Domain.Resources;
+using Domain.Utils;
 
 namespace Domain.Models.Validators;
 
@@ -12,6 +12,6 @@ public class EmailValidator : ValidationAttribute
     }
     public override bool IsValid(object? value)
     {
-        return value != null && MailAddress.TryCreate(value.ToString(), out _);
+        return value != null && value.ToString()!.IsValidEmail();
     }
 }
