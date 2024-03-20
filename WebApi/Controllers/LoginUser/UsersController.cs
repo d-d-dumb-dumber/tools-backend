@@ -1,4 +1,5 @@
-﻿using Domain.Models.Requests;
+﻿using Application.UseCases.LoginUser;
+using Domain.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers.LoginUser;
@@ -8,21 +9,20 @@ namespace WebApi.Controllers.LoginUser;
 /// </summary>
 [ApiController]
 [Route("[controller]")]
-public class UsersController() : BaseController
+public class UsersController(ILoginUserUseCase useCase) : BaseController
 {
     /// <summary>
     /// Cria um usuário.
     /// </summary>
-    /// <response code="201">Successfull request.</response>
+    /// <response code="200">Successfull request.</response>
     /// <response code="400">Invalid Request.</response>
     /// <param name="request"></param>
     [HttpPost("Login")]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> LoginUser([FromBody] LoginUserRequest request)
     {
         ValidateRequest(request);
-        
-        return Created();
+        return Ok(await useCase.Execute(request));
     }
 }
