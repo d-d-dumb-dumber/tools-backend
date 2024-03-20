@@ -1,4 +1,5 @@
-﻿using Domain.DTOs;
+﻿using Application.UseCases.CreateUser;
+using Domain.DTOs;
 using Domain.Exceptions;
 using Domain.Repositories;
 using Domain.UnitOfWork;
@@ -12,14 +13,14 @@ public class PostUserUseCaseTest
 {
     private readonly Mock<IUserRepository> _userRepository;
     private readonly Mock<IUnitOfWork> _unitOfWork;
-    private readonly Application.UseCases.CreateUser.CreateUserUseCase _useCase;
+    private readonly CreateUserUseCase _useCase;
 
     public PostUserUseCaseTest()
     {
         Configuration.SetConfiguration(TestConfigurationBuilder.BuildTestConfiguration());
         this._userRepository = new Mock<IUserRepository>();
         this._unitOfWork = new Mock<IUnitOfWork>();
-        this._useCase = new Application.UseCases.CreateUser.CreateUserUseCase(_userRepository.Object, _unitOfWork.Object);
+        this._useCase = new CreateUserUseCase(_userRepository.Object, _unitOfWork.Object);
     }
 
     [Fact]
