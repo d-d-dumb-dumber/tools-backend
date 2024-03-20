@@ -7,7 +7,7 @@ using Domain.UnitOfWork;
 
 namespace Application.UseCases.CreateUser;
 
-public class CreateUser(IUserRepository repository, IUnitOfWork unitOfWork) : ICreateUser
+public class CreateUserUseCase(IUserRepository repository, IUnitOfWork unitOfWork) : ICreateUserUseCase
 {
     public async Task Execute(CreateUserRequest request)
     {

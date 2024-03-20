@@ -2,7 +2,7 @@
 
 namespace Application.UseCases.CreateUser;
 
-public interface ICreateUser
+public interface ICreateUserUseCase
 {
     public Task Execute(CreateUserRequest request);
 }

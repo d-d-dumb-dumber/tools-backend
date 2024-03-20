@@ -9,7 +9,7 @@ namespace WebApi.Controllers.CreateUser;
 /// </summary>
 [ApiController]
 [Route("[controller]")]
-public class UsersController(ICreateUser createUser) : BaseController
+public class UsersController(ICreateUserUseCase createUserUseCase) : BaseController
 {
     /// <summary>
     /// Cria um usuário.
@@ -25,7 +25,7 @@ public class UsersController(ICreateUser createUser) : BaseController
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
     {
         ValidateRequest(request);
-        await createUser.Execute(request);
+        await createUserUseCase.Execute(request);
         
         return Created();
     }

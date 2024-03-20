@@ -12,14 +12,14 @@ public class PostUserUseCaseTest
     {
         private readonly Mock<IUserRepository> _userRepository;
         private readonly Mock<IUnitOfWork> _unitOfWork;
-        private readonly Application.UseCases.CreateUser.CreateUser _useCase;
+        private readonly Application.UseCases.CreateUser.CreateUserUseCase _useCase;
 
         public PostUserUseCaseTest()
         {
             Configuration.SetConfiguration(TestConfigurationBuilder.BuildTestConfiguration());
             this._userRepository = new Mock<IUserRepository>();
             this._unitOfWork = new Mock<IUnitOfWork>();
-            this._useCase = new Application.UseCases.CreateUser.CreateUser(_userRepository.Object, _unitOfWork.Object);
+            this._useCase = new Application.UseCases.CreateUser.CreateUserUseCase(_userRepository.Object, _unitOfWork.Object);
         }
 
         [Fact]
@@ -27,7 +27,7 @@ public class PostUserUseCaseTest
         {
             UserDto user = new("usuario", "email", "10", "10");
 
-            await _useCase.Execute(CreateUserDataSetup.validUser);
+            await _useCase.Execute(CreateUserUseCaseDataSetup.validUser);
             
             this._userRepository.Verify(repo => repo.AddUser(user), Times.Once);
             this._userRepository.Verify(repo => repo.GetUserByUsername("usuario"), Times.Once);
@@ -44,7 +44,7 @@ public class PostUserUseCaseTest
             LoginConflictException? ex = null;
             try
             {
-                await _useCase.Execute(CreateUserDataSetup.validUser);
+                await _useCase.Execute(CreateUserUseCaseDataSetup.validUser);
             }
             catch (LoginConflictException exception)
             {

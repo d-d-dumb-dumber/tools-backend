@@ -8,7 +8,7 @@ public static class UseCasesExtensions
 {
     public static IServiceCollection AddUseCases(this IServiceCollection services)
     {
-        services.AddScoped<ICreateUser, CreateUser>();
+        services.AddScoped<ICreateUserUseCase, CreateUserUseCase>();
 
         return services;
     }

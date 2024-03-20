@@ -13,11 +13,11 @@ namespace UnitTests.Controllers.CreateUser;
 public class UsersControllerTest
 {
     private readonly UsersController _controller;
-    private readonly Mock<ICreateUser> _createUser;
+    private readonly Mock<ICreateUserUseCase> _createUser;
 
     public UsersControllerTest()
     {
-        this._createUser = new Mock<ICreateUser>();
+        this._createUser = new Mock<ICreateUserUseCase>();
         this._controller = new UsersController(_createUser.Object);
     }
 
