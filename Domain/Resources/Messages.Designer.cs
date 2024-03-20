@@ -105,38 +105,20 @@ namespace Domain.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid username/email or password..
+        /// </summary>
+        public static string InvalidUser {
+            get {
+                return ResourceManager.GetString("InvalidUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid username provided..
         /// </summary>
         public static string InvalidUsername {
             get {
                 return ResourceManager.GetString("InvalidUsername", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The field email is required..
-        /// </summary>
-        public static string RequiredLogin {
-            get {
-                return ResourceManager.GetString("RequiredLogin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The field name is required..
-        /// </summary>
-        public static string RequiredName {
-            get {
-                return ResourceManager.GetString("RequiredName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The field password is required..
-        /// </summary>
-        public static string RequiredPassword {
-            get {
-                return ResourceManager.GetString("RequiredPassword", resourceCulture);
             }
         }
     }

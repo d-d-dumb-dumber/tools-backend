@@ -24,15 +24,6 @@
     <data name="ArgumentStringNullOrEmpty" xml:space="preserve">
         <value>Argument string cannot be null or empty.</value>
     </data>
-    <data name="RequiredLogin" xml:space="preserve">
-        <value>The field email is required.</value>
-    </data>
-    <data name="RequiredName" xml:space="preserve">
-        <value>The field name is required.</value>
-    </data>
-    <data name="RequiredPassword" xml:space="preserve">
-        <value>The field password is required.</value>
-    </data>
     <data name="ConflictUsername" xml:space="preserve">
         <value>Username already registered.</value>
     </data>
@@ -44,5 +35,8 @@
     </data>
     <data name="InvalidUsername" xml:space="preserve">
         <value>Invalid username provided.</value>
+    </data>
+    <data name="InvalidUser" xml:space="preserve">
+        <value>Invalid username/email or password.</value>
     </data>
 </root>
