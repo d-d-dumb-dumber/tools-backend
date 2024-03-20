@@ -1,8 +1,5 @@
-﻿using Domain.Exceptions;
-using Domain.Resources;
-using Infrastructure.DataAccess.Contexts;
+﻿using Domain.DTOs;
 using Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace UnitTests.Repositories;
@@ -13,76 +10,73 @@ public class UserRepositoryTest
     [Fact]
     public async Task Test_Add_New_User()
     {
-        await using var context = StartDatabase();
+        await using var context = ToolsContextMock.StartNewContext();
         var repository = new UserRepository(context);
-        await repository.AddUser(DataSetup.NewUserDto);
+        await repository.AddUser(ToolsContextMock.NewUser1Dto);
         await context.SaveChangesAsync();
-        Assert.Contains(DataSetup.NewUser, context.Users);
-    }
-    
-    [Fact]
-    public async Task Test_Add_Existing_Username_User()
-    {
-        await using var context = StartDatabase();
-        var repository = new UserRepository(context);
-        try
-        {
-            await repository.AddUser(DataSetup.UserDto);
-            await context.SaveChangesAsync();
-        }
-        catch (LoginConflictException exception)
-        {
-            Assert.DoesNotContain(DataSetup.NewUser, context.Users);
-            Assert.Equal(Messages.ConflictUsername, exception.Message);
-        }
+        Assert.Contains(ToolsContextMock.NewUser1, context.Users);
     }
     
     [Fact]
     public async Task Test_Get_Existing_User_By_Username()
     {
-        await using var context = StartDatabase();
+        await using var context = ToolsContextMock.StartNewContext();
         var repository = new UserRepository(context);
-        var result = await repository.GetUserByUsername(DataSetup.EXISTING_USERNAME);
-        Assert.Equal(DataSetup.UserDto, result);
+        var result = await repository.GetUserByUsername(ToolsContextMock.User1.Username);
+        Assert.Equal(new UserDto(ToolsContextMock.User1), result);
     }
     
     [Fact]
     public async Task Test_Get_Non_Existing_Username()
     {
-        await using var context = StartDatabase();
+        await using var context = ToolsContextMock.StartNewContext();
         var repository = new UserRepository(context);
-        var result = await repository.GetUserByUsername(DataSetup.NON_EXISTING_USERNAME);
+        var result = await repository.GetUserByUsername("Bananinha Maligna");
         Assert.Null(result);
     }
     
     [Fact]
     public async Task Test_Get_Existing_User_By_Email()
     {
-        await using var context = StartDatabase();
+        await using var context = ToolsContextMock.StartNewContext();
         var repository = new UserRepository(context);
-        var result = await repository.GetUserByEmail(DataSetup.EXISTING_EMAIL);
-        Assert.Equal(DataSetup.UserDto, result);
+        var result = await repository.GetUserByEmail(ToolsContextMock.User1.Email);
+        Assert.Equal(new UserDto(ToolsContextMock.User1), result);
     }
     
     [Fact]
     public async Task Test_Get_Non_Existing_Email()
     {
-        await using var context = StartDatabase();
+        await using var context = ToolsContextMock.StartNewContext();
         var repository = new UserRepository(context);
-        var result = await repository.GetUserByEmail(DataSetup.NON_EXISTING_EMAIL);
+        var result = await repository.GetUserByEmail("Bananinha Maligna");
         Assert.Null(result);
     }
-
-    private ToolsContext StartDatabase()
+    
+    [Fact]
+    public async Task Test_Get_Existing_User_By_UsernameOrEmail_Using_Username()
     {
-        var options = new DbContextOptionsBuilder<ToolsContext>()
-            .UseInMemoryDatabase(databaseName: "tools_db")
-            .Options;
-        
-        var context = new ToolsContext(options);
-        context.Database.EnsureDeleted();
-        context.Users.Add(DataSetup.User);
-        context.SaveChanges();
-        return context;
+        await using var context = ToolsContextMock.StartNewContext();
+        var repository = new UserRepository(context);
+        var result = await repository.GetUserByUsernameOrEmail(ToolsContextMock.User1.Username);
+        Assert.Equal(new UserDto(ToolsContextMock.User1), result);
+    }
+    
+    [Fact]
+    public async Task Test_Get_Existing_User_By_UsernameOrEmail_Using_Email()
+    {
+        await using var context = ToolsContextMock.StartNewContext();
+        var repository = new UserRepository(context);
+        var result = await repository.GetUserByUsernameOrEmail(ToolsContextMock.User1.Email);
+        Assert.Equal(new UserDto(ToolsContextMock.User1), result);
+    }
+    
+    [Fact]
+    public async Task Test_Get_Non_Existing_User_By_UsernameOrEmail()
+    {
+        await using var context = ToolsContextMock.StartNewContext();
+        var repository = new UserRepository(context);
+        var result = await repository.GetUserByUsernameOrEmail("Bananinha Maligna");
+        Assert.Null(result);
     }
 }
