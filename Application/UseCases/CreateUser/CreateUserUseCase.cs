@@ -22,12 +22,17 @@ public class CreateUserUseCase(IUserRepository repository, IUnitOfWork unitOfWor
         var isValid = true;
         var errors = new List<string>();
         
-        if (await repository.GetUserByUsername(request.Username) != null)
+        var taskGetUserByUsername = repository.GetUserByUsername(request.Username);
+        var taskGetUserByEmail = repository.GetUserByEmail(request.Email);
+
+        await Task.WhenAll(taskGetUserByUsername, taskGetUserByEmail);
+        
+        if (taskGetUserByUsername.Result != null)
         {
             isValid = false;
             errors.Add(Messages.ConflictUsername);
         }
-        if (await repository.GetUserByEmail(request.Email) != null)
+        if (taskGetUserByEmail.Result != null)
         {
             isValid = false;
             errors.Add(Messages.ConflictEmail);
